@@ -1,53 +1,93 @@
-
-
 #include <iostream>
-using namespace std; 
+using namespace std;
 
-void getDimensions(double& length, double& width);
-void rectangleCalc(double length, double width,
-    double& area, double& perimeter);
-void displayResult(double area, double perimeter);
+/*
+    getLength_Width
+    Prompts the user to enter the length and width of a rectangle.
+    Preconditions: User must enter positive numbers (> 0).
+    Postconditions: Stores validated length and width in reference parameters.
+*/
+void getLength_Width(double& length, double& width);
 
-int main()
-{
+/*
+    calcPerimeter
+    Receives validated length and width.
+    Returns the calculated perimeter to the caller.
+*/
+double calcPerimeter(double length, double width);
+
+/*
+    calcArea
+    Receives validated length and width.
+    Returns the calculated area to the caller.
+*/
+double calcArea(double length, double width);
+
+/*
+    displayProperties
+    Displays the rectangle’s perimeter and area.
+    Preconditions: perimeter and area must already be calculated.
+    Postconditions: prints values to the monitor.
+*/
+void displayProperties(double perimeter, double area);
+
+int main() {
     double length, width;
-    double area, perimeter;
-    char choice;
-    do {
-        getDimensions(length, width);
-        rectangleCalc(length, width, area, perimeter);
-        displayResult(area, perimeter);
+    double perimeter, area;
+    char choice = 'y';
 
-        cout << "Calculate another rectangele? (y/n)";
+    cout << "Rectangle Properties Program\n";
+    cout << "-----------------------------\n";
+
+    while (choice == 'y' || choice == 'Y') {
+
+        // Get length and width
+        getLength_Width(length, width);
+
+        // Calculate results
+        perimeter = calcPerimeter(length, width);
+        area = calcArea(length, width);
+
+        // Display results
+        displayProperties(perimeter, area);
+
+        // Ask user if they want to process another rectangle
+        cout << "\nDo you want to process another rectangle? (y/n): ";
         cin >> choice;
+        cout << endl;
+    }
 
-    } while (choice == 'y');
-    cout << "Program Complete. Bye-Bye";
+    cout << "Program ended.\n";
     return 0;
 }
-void getDimensions(double& length, double& width)
-{
-    cout << "Please enter the rectangle's length: ";
+
+void getLength_Width(double& length, double& width) {
+
+    cout << "Enter rectangle length: ";
     cin >> length;
     while (length <= 0) {
-        cout << "Error Length must be greather than 0. Please try again: ";
+        cout << "Invalid! Length must be > 0. Enter again: ";
         cin >> length;
     }
-    cout << "Please enter the rectangle's width: ";
+
+    cout << "Enter rectangle width: ";
     cin >> width;
     while (width <= 0) {
-        cout << "Error. Width must be greater than 0. Please try again: ";
+        cout << "Invalid! Width must be > 0. Enter again: ";
         cin >> width;
     }
 }
-void rectangleCalc(double length, double width,
-    double& area, double& perimeter)
-{
-    area = length * width;
-    perimeter = 2 * (length + width);
+
+double calcPerimeter(double length, double width) {
+    return 2 * (length + width);
 }
-void displayResult(double area, double perimeter)
-{
-    cout << " The are of the rectangle is: " << area << endl;
-    cout << " The perimeter of the rectangle is: " << perimeter << endl;
+
+double calcArea(double length, double width) {
+    return length * width;
+}
+
+void displayProperties(double perimeter, double area) {
+    cout << "\nRectangle Properties:\n";
+    cout << "Perimeter: " << perimeter << endl;
+    cout << "Area: " << area << endl;
 }
