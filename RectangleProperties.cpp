@@ -1,93 +1,81 @@
-#include <iostream>
+﻿#include <iostream>
+#include <string>
 using namespace std;
 
 /*
-    getLength_Width
-    Prompts the user to enter the length and width of a rectangle.
-    Preconditions: User must enter positive numbers (> 0).
-    Postconditions: Stores validated length and width in reference parameters.
+    getRegInfo
+    Prompts the user to enter a region name and its number of accidents.
+    Preconditions: Accident number must be >= 0.
+    Postconditions: Stores the region name and validated accident count
+                    into the reference parameters.
 */
-void getLength_Width(double& length, double& width);
+void getRegInfo(string& region, int& accidents);
 
 /*
-    calcPerimeter
-    Receives validated length and width.
-    Returns the calculated perimeter to the caller.
+    isLower
+    Accepts two integers: newVal and currentLowest.
+    Returns true if newVal <= currentLowest.
+    Used to determine if a region has fewer accidents.
 */
-double calcPerimeter(double length, double width);
+bool isLower(int newVal, int currentLowest);
 
 /*
-    calcArea
-    Receives validated length and width.
-    Returns the calculated area to the caller.
+    showLowest
+    Displays the region with the lowest accident count.
+    Preconditions: region name and accident count must be valid.
+    Postconditions: Writes the results to the screen.
 */
-double calcArea(double length, double width);
-
-/*
-    displayProperties
-    Displays the rectangle�s perimeter and area.
-    Preconditions: perimeter and area must already be calculated.
-    Postconditions: prints values to the monitor.
-*/
-void displayProperties(double perimeter, double area);
+void showLowest(string regionName, int accidentCount);
 
 int main() {
-    double length, width;
-    double perimeter, area;
-    char choice = 'y';
+    string region, lowestRegion;
+    int accidents = 0, lowestAccidents = 0;
 
-    cout << "Rectangle Properties Program\n";
+    cout << "Safest Driving Area Program\n";
     cout << "-----------------------------\n";
 
-    while (choice == 'y' || choice == 'Y') {
+    // FIRST REGION → establishes initial lowest values
+    getRegInfo(region, accidents);
+    lowestRegion = region;
+    lowestAccidents = accidents;
 
-        // Get length and width
-        getLength_Width(length, width);
+    // Remaining 4 regions
+    for (int i = 0; i < 4; i++) {
+        getRegInfo(region, accidents);
 
-        // Calculate results
-        perimeter = calcPerimeter(length, width);
-        area = calcArea(length, width);
-
-        // Display results
-        displayProperties(perimeter, area);
-
-        // Ask user if they want to process another rectangle
-        cout << "\nDo you want to process another rectangle? (y/n): ";
-        cin >> choice;
-        cout << endl;
+        // Check if this region has fewer accidents
+        if (isLower(accidents, lowestAccidents)) {
+            lowestRegion = region;
+            lowestAccidents = accidents;
+        }
     }
 
-    cout << "Program ended.\n";
+    // Display the safest region
+    showLowest(lowestRegion, lowestAccidents);
+
     return 0;
 }
 
-void getLength_Width(double& length, double& width) {
+void getRegInfo(string& region, int& accidents) {
+    cout << "\nEnter region name: ";
+    cin >> region;
 
-    cout << "Enter rectangle length: ";
-    cin >> length;
-    while (length <= 0) {
-        cout << "Invalid! Length must be > 0. Enter again: ";
-        cin >> length;
-    }
+    cout << "Enter number of accidents for " << region << ": ";
+    cin >> accidents;
 
-    cout << "Enter rectangle width: ";
-    cin >> width;
-    while (width <= 0) {
-        cout << "Invalid! Width must be > 0. Enter again: ";
-        cin >> width;
+    while (accidents < 0) {
+        cout << "Invalid! Number of accidents must be >= 0. Enter again: ";
+        cin >> accidents;
     }
 }
 
-double calcPerimeter(double length, double width) {
-    return 2 * (length + width);
+bool isLower(int newVal, int currentLowest) {
+    return (newVal <= currentLowest);
 }
 
-double calcArea(double length, double width) {
-    return length * width;
-}
-
-void displayProperties(double perimeter, double area) {
-    cout << "\nRectangle Properties:\n";
-    cout << "Perimeter: " << perimeter << endl;
-    cout << "Area: " << area << endl;
+void showLowest(string regionName, int accidentCount) {
+    cout << "\n----------------------------------\n";
+    cout << "Safest Region: " << regionName << endl;
+    cout << "Accidents Reported: " << accidentCount << endl;
+    cout << "----------------------------------\n";
 }
